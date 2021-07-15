@@ -30,10 +30,13 @@ jobs:
           tar -xzvf sakila-db.tar.gz
       - name: "Wait for MySQL to initialize"
         run: |
-          curl -LO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-          bash wait-for-it.sh localhost:$MYSQL_PORT --timeout=30
+          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=MYSQL_PASSWORD"
+          while ! echo "SHOW DATABASES;" | mysql ${CONNECTION_OPTS}
+          do
+            echo "Waiting 5s for MySQL to initialize"
+            sleep 15
+          done
       - name: "Import Sakila Database Schema & Data"
         run: |
-          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=MYSQL_PASSWORD"
           mysql ${CONNECTION_OPTS} < sakila-db/sakila-schema.sql
           mysql ${CONNECTION_OPTS} < sakila-db/sakila-data.sql
