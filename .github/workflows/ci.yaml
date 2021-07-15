@@ -13,6 +13,7 @@ jobs:
     env:
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: mariadb-password
+      MYSQL_ROOT_PASSWORD: root-password
       MYSQL_PORT: 3306
     services:
       mysql:
@@ -20,7 +21,7 @@ jobs:
         env:
           MYSQL_USER: ${{ env.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: root-password
+          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
         ports:
           - 3306:3306
     steps:
@@ -28,10 +29,11 @@ jobs:
         run: |
           curl -LO https://downloads.mysql.com/docs/sakila-db.tar.gz
           tar -xzvf sakila-db.tar.gz
-      - name: "Wait for MySQL to initialize"
+      - name: "Wait for MySQL to initialize & Grant all privilleges to 'mariadb' user "
         run: |
-          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=$MYSQL_PASSWORD"
-          while ! echo "SHOW DATABASES;" | mysql ${CONNECTION_OPTS}
+          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=root --password=$MYSQL_ROOT_PASSWORD"
+          # while loop required to poll MySQL until it finishes initialization
+          while ! echo "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%';" | mysql ${CONNECTION_OPTS}
           do
             echo "Waiting 5s for MySQL to initialize"
             sleep 5
