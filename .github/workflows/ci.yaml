@@ -27,3 +27,7 @@ jobs:
         run: |
           curl -LO https://downloads.mysql.com/docs/sakila-db.tar.gz
           tar -xzvf sakila-db.tar.gz
+      - name: "Import Sakila Database Schema & Data"
+        run: |
+          mysql --user=${{ env.MYSQL_USER}} --password=${{ env.MYSQL_PASSWORD }} < sakila-db/sakila-schema.sql
+          mysql --user=${{ env.MYSQL_USER}} --password=${{ env.MYSQL_PASSWORD }} < sakila-db/sakila-data.sql
