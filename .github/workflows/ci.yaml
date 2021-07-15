@@ -1,0 +1,24 @@
+#
+# learning-sql
+# continuous integation pipeline
+#
+
+name: "Learning SQL CI"
+on:
+  push: {}
+jobs:
+  setup-sakila-db:
+    name: "CI: Create Sakila Database"
+    runs-on: ubuntu-20.04
+    env:
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: mriadb-password
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_USER: ${{ env.MYSQL_USER}
+          MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: root-password
+        ports:
+          - 3601:3601
