@@ -13,6 +13,7 @@ jobs:
     env:
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: mriadb-password
+      MYSQL_PORT: 3306
     services:
       mysql:
         image: mysql:8.0
@@ -21,14 +22,18 @@ jobs:
           MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
           MYSQL_ROOT_PASSWORD: root-password
         ports:
-          - 3306:3306
+          - ${{ env.MYSQL_PORT }}:3306
     steps:
       - name: "Download & Extract Sakila Database"
         run: |
           curl -LO https://downloads.mysql.com/docs/sakila-db.tar.gz
           tar -xzvf sakila-db.tar.gz
+      - name: "Wait for MySQL to initialize"
+        run: |
+          curl -LO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+          bash wait-for-it.sh --host=localhost --port=$MYSQL_PORT --timeout=30
       - name: "Import Sakila Database Schema & Data"
         run: |
-          CONNECTION_OPTS="--host=localhost --protocol=tcp --user=${{ env.MYSQL_USER}} --password=${{ env.MYSQL_PASSWORD }}"
+          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=MYSQL_PASSWORD"
           mysql ${CONNECTION_OPTS} < sakila-db/sakila-schema.sql
           mysql ${CONNECTION_OPTS} < sakila-db/sakila-data.sql
