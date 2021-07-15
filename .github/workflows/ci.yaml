@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       MYSQL_USER: mariadb
-      MYSQL_PASSWORD: mriadb-password
+      MYSQL_PASSWORD: mariadb-password
       MYSQL_PORT: 3306
     services:
       mysql:
@@ -30,11 +30,11 @@ jobs:
           tar -xzvf sakila-db.tar.gz
       - name: "Wait for MySQL to initialize"
         run: |
-          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=MYSQL_PASSWORD"
+          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=$MYSQL_PASSWORD"
           while ! echo "SHOW DATABASES;" | mysql ${CONNECTION_OPTS}
           do
             echo "Waiting 5s for MySQL to initialize"
-            sleep 15
+            sleep 5
           done
       - name: "Import Sakila Database Schema & Data"
         run: |
