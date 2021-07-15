@@ -22,3 +22,8 @@ jobs:
           MYSQL_ROOT_PASSWORD: root-password
         ports:
           - 3601:3601
+    steps:
+      - name: "Download & Extract Sakila Database"
+        run: |
+          curl -LO https://downloads.mysql.com/docs/sakila-db.tar.gz
+          tar -xzvf sakila-db.tar.gz
