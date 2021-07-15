@@ -31,7 +31,7 @@ jobs:
       - name: "Wait for MySQL to initialize"
         run: |
           curl -LO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-          bash wait-for-it.sh --host=localhost --port=$MYSQL_PORT --timeout=30
+          bash wait-for-it.sh localhost:$MYSQL_PORT --timeout=30
       - name: "Import Sakila Database Schema & Data"
         run: |
           CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=MYSQL_PASSWORD"
