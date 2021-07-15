@@ -22,7 +22,7 @@ jobs:
           MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
           MYSQL_ROOT_PASSWORD: root-password
         ports:
-          - ${{ env.MYSQL_PORT }}:3306
+          - 3306:3306
     steps:
       - name: "Download & Extract Sakila Database"
         run: |
