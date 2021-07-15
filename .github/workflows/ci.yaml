@@ -38,5 +38,6 @@ jobs:
           done
       - name: "Import Sakila Database Schema & Data"
         run: |
+          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=$MYSQL_PASSWORD"
           mysql ${CONNECTION_OPTS} < sakila-db/sakila-schema.sql
           mysql ${CONNECTION_OPTS} < sakila-db/sakila-data.sql
