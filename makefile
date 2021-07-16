@@ -43,12 +43,9 @@ RUN_EXERCISES:=$(foreach SQL,$(EXERCISE_SQLS),run/$(SQL))
 run: $(RUN_EXERCISES)
 
 run/%.sql: %.sql
-	@$(MYSQL_RUN) sakila < $<
+	@(echo "============[$@]============"; $(MYSQL_RUN) --table sakila < $< )
 
-# 'debug/%' adds to the 'run/%' target by providing features for easiler debugging:
-# - file header
-# - result set in pretty formatted tables.
-# - scrollable output.
+# 'debug/%' adds to the 'run/%' target by providing scrollable output for easiler debugging.
 debug/%.sql: %.sql
 	@(echo "============[$@]============"; $(MYSQL_RUN) --table sakila < $< )| less
 
@@ -62,7 +59,7 @@ $(SAKILA_DIR):
 load-sakila: sakila-schema sakila-data
 
 sakila-schema: $(SAKILA_DIR)
-	$(MYSQL_RUN) < $(SAKILA_DIR)/sakila-schema.sql
+	@$(MYSQL_RUN) < $(SAKILA_DIR)/sakila-schema.sql
 
 sakila-data: $(SAKILA_DIR)
-	$(MYSQL_RUN) < $(SAKILA_DIR)/sakila-data.sql
+	@$(MYSQL_RUN) < $(SAKILA_DIR)/sakila-data.sql
