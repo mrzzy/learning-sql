@@ -1,0 +1,35 @@
+--
+-- Learning SQL
+-- Exercise 6-1
+--
+
+-- create set A
+CREATE TABLE IF NOT EXISTS A (a char);
+INSERT INTO A VALUES ('L');
+INSERT INTO A VALUES ('M');
+INSERT INTO A VALUES ('N');
+INSERT INTO A VALUES ('O');
+INSERT INTO A VALUES ('P');
+
+-- create set B
+CREATE TABLE IF NOT EXISTS B (a char);
+INSERT INTO B VALUES ('P');
+INSERT INTO B VALUES ('Q');
+INSERT INTO B VALUES ('R');
+INSERT INTO B VALUES ('S');
+INSERT INTO B VALUES ('T');
+
+-- set operations specified by exercise
+SELECT * FROM A UNION SELECT * FROM  B;
+
+SELECT * FROM A UNION ALL SELECT * FROM B;
+
+-- NOTE: MYSQL does not support INTERSECT
+SELECT * FROM A INTERSECT SELECT * FROM  B;
+
+-- NOTE: MYSQL does not support EXCEPT
+SELECT * FROM A EXCEPT SELECT * FROM B;
+
+-- cleanup set tables
+DROP TABLE A;
+DROP TABLE B;
