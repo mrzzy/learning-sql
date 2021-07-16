@@ -35,6 +35,15 @@ MYSQL_RUN:=$(MYSQL) --host=$(MYSQL_HOST) --port=$(MYSQL_PORT) \
 .PHONY: download-sakila load-sakila sakila-data sakila-schema run
 	$(RUN_EXERCISES)
 
+.DEFAULT: run
+
+RUN_EXERCISES:=$(foreach SQL,$(EXERCISE_SQLS),run/$(SQL))
+
+run: $(RUN_EXERCISES)
+
+run/%.sql: %.sql
+	$(MYSQL_RUN) sakila <$<
+
 # section: targets to download, load the Sakila database
 download-sakila: $(SAKILA_DIR)
 
@@ -49,11 +58,3 @@ sakila-schema: $(SAKILA_DIR)
 
 sakila-data: $(SAKILA_DIR)
 	$(MYSQL_RUN) < $(SAKILA_DIR)/sakila-data.sql
-
-
-RUN_EXERCISES:=$(foreach SQL,$(EXERCISE_SQLS),run/$(SQL))
-
-run: $(RUN_EXERCISES)
-
-run/%.sql: %.sql
-	$(MYSQL_RUN) sakila <$<
