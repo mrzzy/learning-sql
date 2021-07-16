@@ -27,7 +27,7 @@ MYSQL_PASSWORD?=mariadb-password
 MYSQL_RUN:=$(MYSQL) --host=$(MYSQL_HOST) --port=$(MYSQL_PORT) \
 	--user=$(MYSQL_USER) \
 	--protocol=$(MYSQL_PROTOCOL) \
-	--password=$(MYSQL_PASSWORD) sakila <exercises/chapter_3/exercise_1.sql
+	--password=$(MYSQL_PASSWORD)
 
 .PHONY: download-sakila init-sakila
 
