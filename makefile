@@ -29,7 +29,7 @@ MYSQL_RUN:=$(MYSQL) --host=$(MYSQL_HOST) --port=$(MYSQL_PORT) \
 	--protocol=$(MYSQL_PROTOCOL) \
 	--password=$(MYSQL_PASSWORD)
 
-.PHONY: download-sakila init-sakila
+.PHONY: download-sakila load-sakila sakila-data sakila-schema
 
 download-sakila: $(SAKILA_DIR)
 
@@ -37,6 +37,10 @@ $(SAKILA_DIR):
 	$(CURL) -k https://downloads.mysql.com/docs/sakila-db.tar.gz -o $(SAKILA_DIR).tgz
 	$(TAR) -C $(dir $(SAKILA_DIR)) -xzvf $(SAKILA_DIR).tgz
 
-load-sakila: $(SAKILA_DIR)
+load-sakila: sakila-schema sakila-data
+
+sakila-schema: $(SAKILA_DIR)
 	$(MYSQL_RUN) < $(SAKILA_DIR)/sakila-schema.sql
+
+sakila-data: $(SAKILA_DIR)
 	$(MYSQL_RUN) < $(SAKILA_DIR)/sakila-data.sql
