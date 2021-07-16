@@ -1,0 +1,12 @@
+--
+-- Learning SQL
+-- Exercise 6-2
+--
+
+SELECT first_name, last_name
+FROM customer
+WHERE last_name LIKE 'L%'
+UNION ALL
+SELECT first_name, last_name
+FROM actor
+WHERE last_name LIKE 'L%'
