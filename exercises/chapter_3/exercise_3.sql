@@ -1,6 +1,6 @@
 --
 -- Learning SQL
--- Exercises: Chapter 3-3
+-- Exercise 3-3
 --
 
 SELECT DISTINCT
