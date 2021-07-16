@@ -32,17 +32,25 @@ MYSQL_RUN:=$(MYSQL) --host=$(MYSQL_HOST) --port=$(MYSQL_PORT) \
 	--protocol=$(MYSQL_PROTOCOL) \
 
 
-.PHONY: download-sakila load-sakila sakila-data sakila-schema run
-	$(RUN_EXERCISES)
+.PHONY: download-sakila load-sakila sakila-data sakila-schema run $(RUN_EXERCISES) \
+	debug
 
 .DEFAULT: run
 
+# section: targets to run & debug exercises
 RUN_EXERCISES:=$(foreach SQL,$(EXERCISE_SQLS),run/$(SQL))
 
 run: $(RUN_EXERCISES)
 
 run/%.sql: %.sql
-	$(MYSQL_RUN) sakila <$<
+	@$(MYSQL_RUN) sakila < $<
+
+# 'debug/%' adds to the 'run/%' target by providing features for easiler debugging:
+# - file header
+# - result set in pretty formatted tables.
+# - scrollable output.
+debug/%.sql: %.sql
+	@(echo "============[$@]============"; $(MYSQL_RUN) --table sakila < $< )| less
 
 # section: targets to download, load the Sakila database
 download-sakila: $(SAKILA_DIR)
