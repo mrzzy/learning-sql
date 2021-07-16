@@ -8,8 +8,10 @@ MYSQL:=mysql
 CURL:=curl
 TAR:=tar
 
-# path
+# path aliases
 SAKILA_DIR?=/tmp/sakila-db
+# exercise SQL files as defined as any '.sql' with a 'exercise' prefix
+EXERCISE_SQLS:=$(shell find -type f -name 'exercise*.sql')
 
 # MySql connection parameters
 # target host & port mysql to connect to
@@ -26,11 +28,14 @@ MYSQL_PASSWORD?=mariadb-password
 # shorthand for running mysql client with connection params
 MYSQL_RUN:=$(MYSQL) --host=$(MYSQL_HOST) --port=$(MYSQL_PORT) \
 	--user=$(MYSQL_USER) \
+	--password=$(MYSQL_PASSWORD) \
 	--protocol=$(MYSQL_PROTOCOL) \
-	--password=$(MYSQL_PASSWORD)
 
-.PHONY: download-sakila load-sakila sakila-data sakila-schema
 
+.PHONY: download-sakila load-sakila sakila-data sakila-schema run
+	$(RUN_EXERCISES)
+
+# section: targets to download, load the Sakila database
 download-sakila: $(SAKILA_DIR)
 
 $(SAKILA_DIR):
@@ -44,3 +49,11 @@ sakila-schema: $(SAKILA_DIR)
 
 sakila-data: $(SAKILA_DIR)
 	$(MYSQL_RUN) < $(SAKILA_DIR)/sakila-data.sql
+
+
+RUN_EXERCISES:=$(foreach SQL,$(EXERCISE_SQLS),run/$(SQL))
+
+run: $(RUN_EXERCISES)
+
+run/%.sql: %.sql
+	$(MYSQL_RUN) sakila <$<
