@@ -7,13 +7,13 @@ name: "Learning SQL CI"
 on:
   push: {}
 jobs:
-  setup-sakila-db:
-    name: "CI: Create Sakila Database"
+  run-exercises:
+    name: "CI: Run Exercises"
     runs-on: ubuntu-20.04
     env:
       MYSQL_USER: mariadb
-      MYSQL_PASSWORD: mariadb-password
-      MYSQL_ROOT_PASSWORD: root-password
+      MYSQL_PASSWORD: kx8hquwLaJ73ebN9uFkJ
+      MYSQL_ROOT_PASSWORD: ruR62KHi5eMmHAWTY5Lc
       MYSQL_PORT: 3306
     services:
       mysql:
@@ -41,3 +41,6 @@ jobs:
       - name: "Import Sakila Database Schema & Data"
         run: |
           make load-sakila
+      - name: "Run exercises"
+        run: |
+          make run
