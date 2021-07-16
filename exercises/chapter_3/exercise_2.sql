@@ -8,4 +8,4 @@ SELECT
 FROM
   actor
 WHERE
-  last_name IN ('WILLIAMS', 'DAVIS')
+  last_name IN ('WILLIAMS', 'DAVIS');

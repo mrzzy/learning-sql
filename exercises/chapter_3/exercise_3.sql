@@ -8,4 +8,4 @@ SELECT DISTINCT
 FROM
   rental
 WHERE
-  date(rental_date) = '2005-07-05'
+  date(rental_date) = '2005-07-05';
