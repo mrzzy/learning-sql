@@ -1,0 +1,46 @@
+#
+# learning-sql
+# continuous integation pipeline
+#
+
+name: "Learning SQL CI"
+on:
+  push: {}
+jobs:
+  run-exercises:
+    name: "CI: Run Exercises"
+    runs-on: ubuntu-20.04
+    env:
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: kx8hquwLaJ73ebN9uFkJ
+      MYSQL_ROOT_PASSWORD: ruR62KHi5eMmHAWTY5Lc
+      MYSQL_PORT: 3306
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_USER: ${{ env.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ env.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
+        ports:
+          - 3306:3306
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Download & Extract Sakila Database"
+        run: |
+          make download-sakila
+      - name: "Wait for MySQL to initialize & Grant all privilleges to 'mariadb' user "
+        run: |
+          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=root --password=$MYSQL_ROOT_PASSWORD"
+          # while loop required to poll MySQL until it finishes initialization
+          while ! echo "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%';" | mysql ${CONNECTION_OPTS}
+          do
+            echo "Waiting 5s for MySQL to initialize"
+            sleep 5
+          done
+      - name: "Import Sakila Database Schema & Data"
+        run: |
+          make load-sakila
+      - name: "Run exercises"
+        run: |
+          make run
