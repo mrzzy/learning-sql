@@ -25,10 +25,10 @@ jobs:
         ports:
           - 3306:3306
     steps:
+      - uses: actions/checkout@v2
       - name: "Download & Extract Sakila Database"
         run: |
-          curl -LO https://downloads.mysql.com/docs/sakila-db.tar.gz
-          tar -xzvf sakila-db.tar.gz
+          make download-sakila
       - name: "Wait for MySQL to initialize & Grant all privilleges to 'mariadb' user "
         run: |
           CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=root --password=$MYSQL_ROOT_PASSWORD"
@@ -40,6 +40,4 @@ jobs:
           done
       - name: "Import Sakila Database Schema & Data"
         run: |
-          CONNECTION_OPTS="--host=localhost --port=$MYSQL_PORT --protocol=tcp --user=$MYSQL_USER --password=$MYSQL_PASSWORD"
-          mysql ${CONNECTION_OPTS} < sakila-db/sakila-schema.sql
-          mysql ${CONNECTION_OPTS} < sakila-db/sakila-data.sql
+          make load-sakila
