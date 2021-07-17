@@ -20,7 +20,7 @@ WITH Customer AS (
 )
 
 SELECT
-  c.name SUM(p.amount) total_payments
+  c.name, SUM(p.amount) total_payments
 FROM
   customer c
   LEFT JOIN payment p ON p.customer_id = c.customer_id
