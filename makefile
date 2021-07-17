@@ -47,7 +47,7 @@ run/%.sql: %.sql
 
 # 'debug/%' adds to the 'run/%' target by providing scrollable output for easiler debugging.
 debug/%.sql: %.sql
-	@(echo "============[$@]============"; $(MYSQL_RUN) --table sakila < $< )| less
+	@(echo "============[$@]============"; $(MYSQL_RUN) --table sakila < $< ) 2>&1 | less
 
 # section: targets to download, load the Sakila database
 download-sakila: $(SAKILA_DIR)
