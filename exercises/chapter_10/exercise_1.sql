@@ -19,10 +19,8 @@ WITH Customer AS (
     SELECT 103 Payment_id, 1 Customer_id, 7.99 Amount
 )
 
--- since some customers may have made no payments, we use COALESCE()
--- convert all nulls to 0.0 before summing.
 SELECT
-  c.name, sum(COALESCE(p.amount, 0)) total_payments
+  c.name SUM(p.amount) total_payments
 FROM
   customer c
   LEFT JOIN payment p ON p.customer_id = c.customer_id
